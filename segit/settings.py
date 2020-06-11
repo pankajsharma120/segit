@@ -74,9 +74,17 @@ WSGI_APPLICATION = 'segit.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd2l5dfghli7oje',
+        'USER': 'jfafevikcbylwh',
+        'PASSWORD': '69fbbfa3826a6382a2a145b5eb2ed4db523b073591e0513110c8f1ac2a052e14',
+        'HOST': 'ec2-18-232-143-90.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
