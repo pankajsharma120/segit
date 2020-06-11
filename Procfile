@@ -1,0 +1,1 @@
+web: gunicorn segit.wsgi:application --log-file -
