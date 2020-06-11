@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block head_injections %}
+  <style media="screen">
+    body{
+      background: url('/media/login_bk.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+
+<header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">SeGit</span>
+      <div class="mdl-layout-spacer"></div>
+    </div>
+  </header>
+
+<div class="container mt-5">
+  <div class="row">
+      {% block details %}{% endblock %}
+  </div>
+</div>
+
+{% endblock %}
