@@ -14,7 +14,7 @@ import os
 
 
 LOGIN_URL = '/users/login/'
-LOGIN_REDIRECT_URL = '/user/home/'
+LOGIN_REDIRECT_URL = '/users/list-public-repo/'
 LOGOUT_URL = '/users/logout/'
 LOGOUT_REDIRECT_URL = '/users/login/'
 
