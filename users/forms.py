@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=True, help_text='Optional.')
+    first_name = forms.CharField(max_length=30, required=True,)
     class Meta:
         model = User
         fields = ('username', 'first_name', 'password1', 'password2', )

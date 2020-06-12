@@ -1,0 +1,16 @@
+{% extends 'users/layout.html' %}
+
+{% block page_content %}
+    <div class="m-5">
+      {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-danger" role="alert">
+                {{message}}
+              </div>
+            {% endfor %}
+      {% endif %}
+      <a href="https://github.com/login/oauth/authorize/?{{redirect_url}}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+        Link your account with Github
+      </a>
+    </div>
+{% endblock %}

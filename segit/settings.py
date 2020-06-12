@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+
+LOGIN_URL = '/users/login/'
+LOGIN_REDIRECT_URL = '/user/home/'
+LOGOUT_URL = '/users/logout/'
+LOGOUT_REDIRECT_URL = '/users/login/'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -82,10 +88,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd2l5dfghli7oje',
-        'USER': 'jfafevikcbylwh',
-        'PASSWORD': '69fbbfa3826a6382a2a145b5eb2ed4db523b073591e0513110c8f1ac2a052e14',
-        'HOST': 'ec2-18-232-143-90.compute-1.amazonaws.com',
+        'NAME': 'd2dm1a7ikdjar7',
+        'USER': 'ezdogdnnelxyfd',
+        'PASSWORD': '864e04c6dc365cdb51c0c0588bc36083aa03835cc880ef92dfb122f4685c0cfa',
+        'HOST': 'ec2-54-211-210-149.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
