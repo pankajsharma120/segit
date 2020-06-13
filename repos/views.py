@@ -11,7 +11,7 @@ import json
 
 class HandelWebHook(generic.edit.ProcessFormView):
     def post(self,request,*args,**kwargs):
-        WebHookEventModel.objects.create(event=request.POST)
+        WebHookEventModel.objects.create(event=json.dumps(request.POST))
         return super(HandelWebHook,self).post(request,*args,**kwargs)
 
 class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.ProcessFormView):
