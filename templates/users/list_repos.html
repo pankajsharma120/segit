@@ -12,7 +12,7 @@
               {{repo.1}}
             </div>
             <div class="mdl-card__actions mdl-card--border">
-              <a href="{% url 'repos:create_hook' repo=repo.0 %}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+              <a href="{% url 'repos:create_hook' repo=repo.0 %}?id={{repo.2}}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
                 Create hook
               </a>
             </div>

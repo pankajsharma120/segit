@@ -22,7 +22,7 @@ class ListMyReposView(LoginRequiredMixin,GitAuthRequiredMixin,generic.TemplateVi
         git_acc = self.request.user.github_acc
         r = requests.get('https://api.github.com/users/'+git_acc.git_username+'/repos',
                     headers={'Accept':'application/json'})
-        context['repo_list'] = [[repo.get('name'),repo.get('description')] for repo in r.json()]
+        context['repo_list'] = [[repo.get('name'),repo.get('description'),repo.get('id')] for repo in r.json()]
         return context
 
 

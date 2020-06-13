@@ -1,17 +1,17 @@
 from django.shortcuts import render
 from django.views import generic
+from django.urls import reverse
 from users.mixins import GitAuthRequiredMixin
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from repos.models import RespoModel, WebHookEventModel
 import requests
 import json
 # Create your views here.
 
 class HandelWebHook(generic.edit.ProcessFormView):
     def post(self,request,*args,**kwargs):
-        print(request.POST)
-        print(args)
-        print(kwargs)
+        WebHookEventModel.objects.create(event=request.POST)
         return super(HandelWebHook,self).post(request,*args,**kwargs)
 
 class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.ProcessFormView):
@@ -26,7 +26,7 @@ class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.Process
                 "pull_request"
               ],
               "config": {
-                "url": "https://segit.herokuapp.com/repos/webhook/"+repo_name+"/",
+                "url": "https://postb.in/1592023819591-8133956724777",
                 "content_type": "json",
                 "insecure_ssl": "0"
               }
@@ -34,7 +34,10 @@ class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.Process
         data = json.dumps(data)
         r = requests.post('https://api.github.com/repos/'+git_acc.git_username+'/'+repo_name+'/hooks',
                     data=data, headers={'Accept':'application/json','Authorization':'token '+git_acc.access_token})
-        print(r.text,r.status_code)
         result = r.json()
-        print(result)
+        print(result,r.status_code)
+        if r.status_code==201:
+            repo = RespoModel.objects.create(repo_id=request.GET.get('id'),
+                        repo_name=repo_name,git_acc=git_acc)
+
         return HttpResponseRedirect(reverse("users:home"))
