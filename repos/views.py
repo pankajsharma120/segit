@@ -5,14 +5,19 @@ from users.mixins import GitAuthRequiredMixin
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from repos.models import RespoModel, WebHookEventModel
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.http import HttpResponse
 import requests
 import json
 # Create your views here.
 
+@method_decorator(csrf_exempt, name='dispatch')
 class HandelWebHook(generic.edit.ProcessFormView):
     def post(self,request,*args,**kwargs):
-        WebHookEventModel.objects.create(event=json.dumps(request.POST))
-        return super(HandelWebHook,self).post(request,*args,**kwargs)
+        WebHookEventModel.objects.create(event=json.dumps(request.body.decode('utf-8')))
+        print(json.dumps(request.body.decode('utf-8')))
+        return HttpResponse(status=204)
 
 class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.ProcessFormView):
     def get(self, request, *args, **kwargs):
@@ -27,6 +32,7 @@ class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.Process
               ],
               "config": {
                 "url": "https://segit.herokuapp.com/repos/webhook/"+repo_name+"/",
+                # "url": 'https://postb.in/1592028963532-9094901275821',
                 "content_type": "json",
                 "insecure_ssl": "0"
               }
