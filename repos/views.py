@@ -15,8 +15,7 @@ import json
 @method_decorator(csrf_exempt, name='dispatch')
 class HandelWebHook(generic.edit.ProcessFormView):
     def post(self,request,*args,**kwargs):
-        WebHookEventModel.objects.create(event=json.dumps(request.body.decode('utf-8')))
-        print(json.dumps(request.body.decode('utf-8')))
+        WebHookEventModel.objects.create(event=json.loads(request.body))
         return HttpResponse(status=204)
 
 class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.ProcessFormView):
