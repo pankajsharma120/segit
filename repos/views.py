@@ -26,7 +26,7 @@ class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.Process
                 "pull_request"
               ],
               "config": {
-                "url": "https://postb.in/1592023819591-8133956724777",
+                "url": "https://segit.herokuapp.com/repos/webhook/"+repo_name+"/",
                 "content_type": "json",
                 "insecure_ssl": "0"
               }
@@ -38,6 +38,6 @@ class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.Process
         print(result,r.status_code)
         if r.status_code==201:
             repo = RespoModel.objects.create(repo_id=request.GET.get('id'),
-                        repo_name=repo_name,git_acc=git_acc)
+                        repo_name=repo_name,git_acc=git_acc,hook_id=result.get('id'))
 
         return HttpResponseRedirect(reverse("users:home"))
