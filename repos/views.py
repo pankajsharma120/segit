@@ -14,6 +14,12 @@ import requests
 import json
 # Create your views here.
 
+class ListMyRepos(LoginRequiredMixin,GitAuthRequiredMixin,generic.ListView):
+    template_name = 'users/list_selected_repos.html'
+    paginate_by = 35
+    def get_queryset(self):
+        return RespoModel.objects.filter(git_acc__user=self.request.user)
+
 @method_decorator(csrf_exempt, name='dispatch')
 class HandelWebHook(generic.edit.ProcessFormView):
     def post(self,request,*args,**kwargs):
