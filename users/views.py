@@ -57,7 +57,7 @@ class GitAuthVerify(LoginRequiredMixin,RedirectView):
                 'client_id': '9ac09bc2e10d0ea9de65',
                 'client_secret': '0f3bf21e9269f7151e29b3aa876cda934a94d5be',
                 'code': self.request.GET.get('code'),
-                'redirect_uri':'http://127.0.0.1:8000/users/list-public-repo/',
+                'redirect_uri':'https://segit.herokuapp.com/users/git-auth/verify/',
                 'state':git_acc.state
             }
         r = requests.post('https://github.com/login/oauth/access_token', data=data, headers={'Accept':'application/json'})
