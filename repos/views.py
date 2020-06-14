@@ -8,7 +8,7 @@ from repos.models import RespoModel, WebHookEventModel
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
-from segit.utils import get_state_string
+from segit.utils import get_state_string, get_or_none
 from django.http import HttpResponse
 import requests
 import json
@@ -17,7 +17,7 @@ import json
 @method_decorator(csrf_exempt, name='dispatch')
 class HandelWebHook(generic.edit.ProcessFormView):
     def post(self,request,*args,**kwargs):
-        repo = get_object_or_404(RespoModel,end_sec=kwargs.get('end-sec'))
+        repo = get_object_or_404(RespoModel,end_sec=kwargs.get('repo'))
         WebHookEventModel.objects.create(event=json.loads(request.body),repo=repo)
         return HttpResponse(status=204)
 
@@ -25,6 +25,8 @@ class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.Process
     def get(self, request, *args, **kwargs):
         git_acc = request.user.github_acc
         repo_name = kwargs.get('repo')
+        if get_or_none(RespoModel,git_acc=git_acc,repo_name=repo_name):
+            return HttpResponseRedirect(reverse("users:home"))
         end_sec = get_state_string()
         data = {
               "name": "web",
