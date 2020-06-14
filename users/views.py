@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from segit.utils import get_state_string
 from users.models import GitHubAccountModel
+from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404, render
 from django.http import Http404, HttpResponseRedirect
 from django.views.generic.base import RedirectView
@@ -32,6 +33,8 @@ class RegisterView(generic.CreateView):
     model = User
     template_name = 'registration/register.html'
     def get_success_url(self):
+        user = authenticate(username = self.request.POST.get('username'),password = self.request.POST.get('password1'))
+        login(self.request,user)
         return reverse('users:home')
 
 class GitAuthView(LoginRequiredMixin,generic.TemplateView):
