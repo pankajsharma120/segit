@@ -42,7 +42,7 @@ class GitAuthView(LoginRequiredMixin,generic.TemplateView):
         git_acc.state = get_state_string()
         git_acc.save()
         a = (('client_id','9ac09bc2e10d0ea9de65'),
-            ('redirect_uri','http://127.0.0.1:8000/users/git-auth/verify/'),
+            ('redirect_uri','https://segit.herokuapp.com/users/git-auth/verify/'),
             ('login',self.request.user.username),('scope','repo'),
             ('state', git_acc.state))
         context['redirect_url'] = urllib.parse.urlencode(a)
