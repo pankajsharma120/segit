@@ -22,14 +22,13 @@ class ListAllEvents(LoginRequiredMixin,GitAuthRequiredMixin,generic.ListView):
             raise Http404
         return super().dispatch(request,*args,**kwargs)
     def get_queryset(self,*args,**kwargs):
-        print(args,kwargs,self.kwargs)
         return WebHookEventModel.objects.filter(repo=self.repo)
 
 class ListMyRepos(LoginRequiredMixin,GitAuthRequiredMixin,generic.ListView):
     template_name = 'users/list_selected_repos.html'
     paginate_by = 20
     def get_queryset(self):
-        return RespoModel.objects.filter(git_acc__user=self.request.user)
+        return RespoModel.objects.filter(git_acc__user=self.request.user).prefetch_related('webhook').order_by('pk')
 
 @method_decorator(csrf_exempt, name='dispatch')
 class HandelWebHook(generic.edit.ProcessFormView):
