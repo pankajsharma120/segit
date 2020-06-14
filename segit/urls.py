@@ -16,12 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.views.generic.base import RedirectView
+from django.urls import reverse_lazy
+
 from .settings import MEDIA_ROOT, MEDIA_URL
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',RedirectView.as_view(url=reverse_lazy('users:home'))),
     path('users/', include('users.urls')),
     path('repos/', include('repos.urls')),
 ]+ static(MEDIA_URL, document_root=MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
