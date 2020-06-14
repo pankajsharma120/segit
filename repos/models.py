@@ -16,6 +16,8 @@ class RespoModel(models.Model):
 class WebHookEventModel(models.Model):
     repo = models.ForeignKey('repos.RespoModel',null=True,related_name='webhook',on_delete=models.CASCADE)
     event = JSONField(default=dict)
-
+    date_time = models.DateTimeField(auto_now_add=True,editable=True)
+    class Meta:
+        ordering = ['date_time']
     def __str__(self):
         return self.repo.__str__()

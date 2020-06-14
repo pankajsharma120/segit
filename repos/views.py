@@ -2,21 +2,31 @@ from django.shortcuts import render
 from django.views import generic
 from django.urls import reverse
 from users.mixins import GitAuthRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from repos.models import RespoModel, WebHookEventModel
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from segit.utils import get_state_string, get_or_none
-from django.http import HttpResponse
 import requests
 import json
 # Create your views here.
 
+class ListAllEvents(LoginRequiredMixin,GitAuthRequiredMixin,generic.ListView):
+    paginate_by = 20
+    template_name = 'users/list_events.html'
+    def dispatch(self,request,*args,**kwargs):
+        self.repo = get_object_or_404(RespoModel,repo_id=self.kwargs.get('repo'))
+        if not self.repo.git_acc==self.request.user.github_acc:
+            raise Http404
+        return super().dispatch(request,*args,**kwargs)
+    def get_queryset(self,*args,**kwargs):
+        print(args,kwargs,self.kwargs)
+        return WebHookEventModel.objects.filter(repo=self.repo)
+
 class ListMyRepos(LoginRequiredMixin,GitAuthRequiredMixin,generic.ListView):
     template_name = 'users/list_selected_repos.html'
-    paginate_by = 35
     def get_queryset(self):
         return RespoModel.objects.filter(git_acc__user=self.request.user)
 
