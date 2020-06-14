@@ -27,6 +27,7 @@ class ListAllEvents(LoginRequiredMixin,GitAuthRequiredMixin,generic.ListView):
 
 class ListMyRepos(LoginRequiredMixin,GitAuthRequiredMixin,generic.ListView):
     template_name = 'users/list_selected_repos.html'
+    paginate_by = 20
     def get_queryset(self):
         return RespoModel.objects.filter(git_acc__user=self.request.user)
 
@@ -41,8 +42,9 @@ class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.Process
     def get(self, request, *args, **kwargs):
         git_acc = request.user.github_acc
         repo_name = kwargs.get('repo')
-        if get_or_none(RespoModel,git_acc=git_acc,repo_name=repo_name):
-            return HttpResponseRedirect(reverse("users:home"))
+        repo_obj = get_or_none(RespoModel,git_acc=git_acc,repo_name=repo_name)
+        if repo_obj:
+            return HttpResponseRedirect(repo_obj.get_absolute_url())
         end_sec = get_state_string()
         data = {
               "name": "web",

@@ -10,6 +10,7 @@
               mdl-layout--fixed-header">
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title">{% block title %}{% endblock %}</span>
         <div class="mdl-layout-spacer"></div>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
                     mdl-textfield--floating-label mdl-textfield--align-right">
@@ -29,7 +30,6 @@
       <nav class="mdl-navigation">
         <a href="{% url 'users:home' %}" class="mdl-navigation__link" href="">My public repos</a>
         <a href="{% url 'repos:list_selected_repos' %}" class="mdl-navigation__link" href="">My selected repos</a>
-        <a class="mdl-navigation__link" href="">All Events</a>
         <a href="{% url 'users:logout' %}" class="mdl-navigation__link" href="">Logout</a>
       </nav>
     </div>

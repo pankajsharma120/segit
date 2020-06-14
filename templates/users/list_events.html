@@ -1,6 +1,7 @@
 {% extends 'users/layout.html' %}
-
+{% block title %}List Events{% endblock %}
 {% block page_content %}
+
     <div class="row">
       {% if object_list %}
         {% for object in object_list %}
@@ -12,7 +13,9 @@
               <div class="mdl-card__supporting-text">
                 <div class="collapse multi-collapse" id="multiCollapse{{forloop.counter}}">
                  <div class="card card-body">
-                   {{object.event}}
+                   {% for key,value in object.event.items %}
+                      <h6>{{key}}:  <strong>{{value}}</strong></h6>
+                   {% endfor %}
                  </div>
                </div>
               </div>
@@ -24,9 +27,34 @@
             </div>
           </div>
         {% endfor %}
+        {% if is_paginated %}
+          <div class="col-12">
+            <nav class="Page navigation m-5">
+              <ul class="pagination">
+                {% if page_obj.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="disabled page-link"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                  {% if page_obj.number == i %}
+                    <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                  <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+                {% endif %}
+              </ul>
+            </nav>
+          </div>
+        {% endif %}
       {% else %}
         <div class="col-12">
-          <p>No repository selected yet.</p>
+          <p class="text-center">No events</p>
         </div>
       {% endif %}
     </div>
