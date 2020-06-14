@@ -9,6 +9,7 @@ class RespoModel(models.Model):
     repo_name = models.CharField(max_length=120,null=False)
     repo_id = models.CharField(max_length=50,null=False)
     hook_id = models.CharField(max_length=40)
+    end_sec = models.CharField(max_length=250,null=False,unique=True)
     def __str__(self):
         return self.repo_name
 

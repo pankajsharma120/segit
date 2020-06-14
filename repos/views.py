@@ -7,6 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from repos.models import RespoModel, WebHookEventModel
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404
+from segit.utils import get_state_string
 from django.http import HttpResponse
 import requests
 import json
@@ -15,13 +17,15 @@ import json
 @method_decorator(csrf_exempt, name='dispatch')
 class HandelWebHook(generic.edit.ProcessFormView):
     def post(self,request,*args,**kwargs):
-        WebHookEventModel.objects.create(event=json.loads(request.body))
+        repo = get_object_or_404(RespoModel,end_sec=kwargs.get('end-sec'))
+        WebHookEventModel.objects.create(event=json.loads(request.body),repo=repo)
         return HttpResponse(status=204)
 
 class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.ProcessFormView):
     def get(self, request, *args, **kwargs):
         git_acc = request.user.github_acc
         repo_name = kwargs.get('repo')
+        end_sec = get_state_string()
         data = {
               "name": "web",
               "active": True,
@@ -30,7 +34,7 @@ class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.Process
                 "pull_request"
               ],
               "config": {
-                "url": "https://segit.herokuapp.com/repos/webhook/"+repo_name+"/",
+                "url": "https://segit.herokuapp.com/repos/webhook/"+end_sec+"/",
                 # "url": 'https://postb.in/1592028963532-9094901275821',
                 "content_type": "json",
                 "insecure_ssl": "0"
@@ -43,6 +47,7 @@ class CreateWebHook(LoginRequiredMixin,GitAuthRequiredMixin,generic.edit.Process
         print(result,r.status_code)
         if r.status_code==201:
             repo = RespoModel.objects.create(repo_id=request.GET.get('id'),
-                        repo_name=repo_name,git_acc=git_acc,hook_id=result.get('id'))
+                        repo_name=repo_name,git_acc=git_acc,hook_id=result.get('id'),
+                        end_sec=end_sec)
 
         return HttpResponseRedirect(reverse("users:home"))
